@@ -8,7 +8,7 @@ function SongList() {
   const dispatch = useDispatch();
 
   // Ensure that songs is an array before mapping
-  const songs = songsState.songs || [];
+  const songs = songsState.songs || []; 
 
   const handleAddSong = () => {
     dispatch(addSong({ id: Date.now(), title: 'New Song', artist: 'New Artist' }));
