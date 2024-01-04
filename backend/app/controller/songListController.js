@@ -40,3 +40,24 @@ exports.addSongToSongList = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.removeSongFromSongList = async (req, res) => {
+    try {
+      const { songId } = req.body;
+      const songListId = req.params.id;
+  
+      const updatedSongList = await SongList.findByIdAndUpdate(
+        songListId,
+        { $pull: { songList: songId } },
+        { new: true }
+      ).populate('songList');
+  
+      if (updatedSongList) {
+        res.json(updatedSongList);
+      } else {
+        res.status(404).json({ error: 'Song list not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };

@@ -14,5 +14,5 @@ const songListController=require('../controller/songListController')
 router.get('/my-list', songListController.getAllSongLists);
 router.post('/createList', songListController.createSongList);
 router.post('/my-list/:id/add-song', songListController.addSongToSongList);
-
+router.delete('/my-list/delete/:id', songListController.getAllSongLists);
 module.exports = router;
