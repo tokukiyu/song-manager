@@ -12,6 +12,7 @@ const initialState = {
 const songsSlice = createSlice({
   name: 'songs',
   initialState,
+  
   reducers: {
     addSong: (state, action) => {
       state.songs.push(action.payload);
@@ -29,6 +30,7 @@ const songsSlice = createSlice({
       state.songs = state.songs.filter((song) => song.id !== idToDelete);
     },
   },
+
 });
 
 export const { addSong, updateSong, deleteSong } = songsSlice.actions;
