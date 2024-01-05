@@ -3,7 +3,7 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import axios from 'axios';
 import { setSongs, setLoading, setError, updateSong } from './songsSlice';
 
-const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Example API URL
+const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; 
 
 function* handleUpdateSong(action) {
   try {

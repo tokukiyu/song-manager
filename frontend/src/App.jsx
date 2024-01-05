@@ -7,6 +7,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { Normalize } from 'styled-normalize';
 import store from './app/store';
 import SongList from './components/SongList';
+import './App.css'
 
 const theme = {
   // Define your theme here

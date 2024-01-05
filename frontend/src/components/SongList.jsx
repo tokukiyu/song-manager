@@ -29,19 +29,16 @@ const SongItem = styled(Flex)`
   font-size: 16px;
 
   button {
-    margin-left: 10px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #217dbb;
-    }
+    ${space}
+    ${color}
+    ${layout}
+    // Additional Tailwind CSS classes
+    bg-blue-500
+    text-white
+    rounded
+    transition
+    duration-300
+    hover:bg-blue-700
   }
 
   ${space}
@@ -88,12 +85,19 @@ function SongList() {
       {error && <Error>Error: {error}</Error>}
       <ul>
         {songs.map((song) => (
-          <SongItem key={song.id} alignItems="center" justifyContent="space-between">
+          <SongItem
+            key={song.id}
+            alignItems="center"
+            justifyContent="space-between"
+            p={3} // Use Tailwind CSS spacing utilities
+          >
             <div>
               <strong>{song.title}</strong> by {song.artist}
             </div>
             <div>
-              <button onClick={() => handleUpdateSong(song.id, 'Updated Song', 'Updated Artist')}>
+              <button
+                onClick={() => handleUpdateSong(song.id, 'Updated Song', 'Updated Artist')}
+              >
                 Update
               </button>
               <button onClick={() => handleDeleteSong(song.id)}>Delete</button>
