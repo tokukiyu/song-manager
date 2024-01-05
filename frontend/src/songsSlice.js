@@ -2,18 +2,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  songs: [
-    { id: 1, title: 'Song 1', artist: 'Artist 1' },
-    { id: 2, title: 'Song 2', artist: 'Artist 2' },
-    // Add more initial songs as needed
-  ],
+  songs: [],
+  loading: false,
+  error: null,
 };
 
 const songsSlice = createSlice({
   name: 'songs',
   initialState,
-  
   reducers: {
+    setSongs: (state, action) => {
+      state.songs = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
     addSong: (state, action) => {
       state.songs.push(action.payload);
     },
@@ -30,8 +36,7 @@ const songsSlice = createSlice({
       state.songs = state.songs.filter((song) => song.id !== idToDelete);
     },
   },
-
 });
 
-export const { addSong, updateSong, deleteSong } = songsSlice.actions;
+export const { setSongs, setLoading, setError, addSong, updateSong, deleteSong } = songsSlice.actions;
 export default songsSlice.reducer;
