@@ -6,57 +6,70 @@ import { Box, Flex } from 'rebass/styled-components';
 import styled from '@emotion/styled';
 import { space, color, layout } from 'styled-system';
 
-
 const SongListContainer = styled(Box)`
-  // Existing styles
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-  // Tailwind CSS classes
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   ${space}
   ${color}
   ${layout}
 `;
 
 const SongItem = styled(Flex)`
-  // Tailwind CSS classes
   list-style-type: none;
-  margin-bottom: 15px;
-  padding: 15px;
-  bg-red-700 border border-gray-300 rounded-md text-base;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: transform 0.2s ease-in-out;
 
-  // Tailwind utility classes for Flex component
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #2c3e50;
+    }
+
+    ${space}
+    ${color}
+    ${layout}
+  }
+
   ${space}
   ${color}
   ${layout}
-
-  &:hover {
-    // Tailwind CSS hover classes
-    bg-gray-200 border-gray-400;
-  }
 `;
 
-
 const Loader = styled(Box)`
-  // Existing styles
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  color: #3498db;
 
-  // Tailwind CSS classes
   ${space}
   ${color}
   ${layout}
 `;
 
 const Error = styled(Box)`
-  // Existing styles
-  color: red;
+  color: #e74c3c;
+  font-size: 18px;
+  font-weight: bold;
 
-  // Tailwind CSS classes
   ${space}
   ${color}
   ${layout}
@@ -88,9 +101,9 @@ function SongList() {
             key={song.id}
             alignItems="center"
             justifyContent="space-between"
-            p={3}
+            p={3} // Use Tailwind CSS spacing utilities
           >
-            <div className=''>
+            <div>
               <strong>{song.title}</strong> by {song.artist}
             </div>
             <div>
