@@ -4,9 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSong, deleteSong, addSong, fetchSongs } from '../songsSlice';
 import { Box, Flex } from 'rebass/styled-components';
 import styled from '@emotion/styled';
+import Modal from 'react-modal'; 
 import { space, color, layout } from 'styled-system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faMusic, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+
+
 
 const SongListContainer = styled(Box)`
   width: 100%;
@@ -105,12 +108,17 @@ function SongList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch songs when the component mounts
-    dispatch(fetchSongs());
-  }, [dispatch]);
+    if (songs.length === 0) {
+      dispatch(fetchSongs());
+    }
+  }, [dispatch, songs]);
 
   const [newSongTitle, setNewSongTitle] = useState('');
   const [newSongArtist, setNewSongArtist] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleUpdateSong = (id, title, artist) => {
     dispatch(updateSong({ id, title, artist }));
@@ -127,32 +135,47 @@ function SongList() {
       dispatch(addSong({ title: newSongTitle, artist: newSongArtist }));
       setNewSongTitle('');
       setNewSongArtist('');
+      closeModal(); // Close the modal after successfully adding a song
     }
   };
-
 
   return (
     <SongListContainer>
       {loading && <Loader>Loading...</Loader>}
       {error && <Error>Error: {error}</Error>}
-      <AddSongForm onSubmit={handleAddSong}>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newSongTitle}
-          onChange={(e) => setNewSongTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Artist"
-          value={newSongArtist}
-          onChange={(e) => setNewSongArtist(e.target.value)}
-        />
-        <button type="submit">
-          <FontAwesomeIcon icon={faPlus} className="mr-1" />
-          Add Song
-        </button>
-      </AddSongForm>
+      <button className="m-2 bg-green-500 text-white p-2" onClick={openModal}>
+        <FontAwesomeIcon icon={faPlus} className="mr-1" />
+        Add Song
+      </button>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        className="absolute top-1/2 left-1/2 transform bg-white -translate-x-1/2 -translate-y-1/2 border-none rounded shadow-md max-h-70vh w-70vw max-w-400px p-8"
+        contentLabel="Add Song Modal"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the overlay color and opacity
+          },}}
+      >
+        <AddSongForm onSubmit={handleAddSong}>
+          <input
+            type="text"
+            placeholder="Title"
+            value={newSongTitle}
+            onChange={(e) => setNewSongTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Artist"
+            value={newSongArtist}
+            onChange={(e) => setNewSongArtist(e.target.value)}
+          />
+          <button type="submit">
+            <FontAwesomeIcon icon={faPlus} className="mr-1" />
+            Add Song
+          </button>
+        </AddSongForm>
+      </Modal>
       <ul className="flex flex-col gap-3 p-3">
         {songs.map((song) => (
           <SongItem
