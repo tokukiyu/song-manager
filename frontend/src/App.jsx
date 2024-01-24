@@ -24,7 +24,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <StyledThemeProvider theme={theme}>
           <Normalize />
-          <AppWrapper>
+          <AppWrapper className=' items-center w-full flex flex-col'>
             <h1>Song List App</h1>
             <SongList />
           </AppWrapper>

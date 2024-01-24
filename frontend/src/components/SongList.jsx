@@ -151,7 +151,7 @@ function SongList() {
     <SongListContainer>
       {loading && <Loader>Loading...</Loader>}
       {error && <Error>Error: {error}</Error>}
-      <button className="m-2 bg-green-500 text-white p-2" onClick={openModal}>
+      <button className="m-2 rounded bg-gray-300 text-black p-2" onClick={openModal}>
         <FontAwesomeIcon icon={faPlus} className="mr-1" />
         Add Song
       </button>
@@ -189,27 +189,28 @@ function SongList() {
         {songs?.map((song) => (
           <SongItem
             key={song.id}
-            className="flex flex-col lg:flex-row items-center lg:justify-between p-3"
+            className="flex flex-col lg:flex-row lg:justify-between p-3"
           >
             <div className="mb-2 lg:mb-0 lg:mr-4 flex items-center">
-              <FontAwesomeIcon icon={faMusic} className="mr-2 text-blue-500" />
+              <FontAwesomeIcon icon={faMusic} className="mr-2 p-3  bg-gray-200 rounded-md text-3xl text-blue-500" />
               <div>
                 <strong>{song.title}</strong>
                 <span className="text-gray-500 block"> by {song.artist}</span>
               </div>
             </div>
+
             <div className="flex flex-nowrap">
               <button
-                className="m-2 bg-blue-500 flex"
+                className="m-3 bg-blue-500 flex"
                 onClick={() =>
                   handleUpdateSong(song.id, "Updated Song", "Updated Artist")
                 }
               >
-                <FontAwesomeIcon icon={faEdit} className="mr-0.5 text-sm" />
+                <FontAwesomeIcon icon={faEdit} className="mr-0.5  text-sm" />
                 Update
               </button>
               <button
-                className="m-2 bg-gray-200 flex items-center text-black"
+                className="m-3 bg-gray-200 flex items-center text-black"
                 onClick={() => handleDeleteSong(song.id)}
               >
                 <FontAwesomeIcon icon={faTrash} className="mr-0.5 text-sm" />
