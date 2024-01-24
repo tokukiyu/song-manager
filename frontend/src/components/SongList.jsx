@@ -76,12 +76,12 @@ const AddSongForm = styled.form`
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #2ecc71;
     color: #fff;
     transition: background-color 0.2s ease-in-out;
 
     &:hover {
-      background-color: #27ae60;
+      background-color: #2c3e50;
+      color: #fff;
     }
   }
 `;
@@ -179,7 +179,7 @@ function SongList() {
             value={newSongArtist}
             onChange={(e) => setNewSongArtist(e.target.value)}
           />
-          <button type="submit">
+          <button className=" bg-blue-500" type="submit">
             <FontAwesomeIcon icon={faPlus} className="mr-1" />
             Add Song
           </button>
