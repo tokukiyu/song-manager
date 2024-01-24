@@ -1,15 +1,18 @@
 // src/components/SongList.js
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateSong, deleteSong, addSong, fetchSongs } from '../songsSlice';
-import { Box, Flex } from 'rebass/styled-components';
-import styled from '@emotion/styled';
-import Modal from 'react-modal'; 
-import { space, color, layout } from 'styled-system';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faMusic, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-
-
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateSong, deleteSong, addSong, fetchSongs } from "../songsSlice";
+import { Box, Flex } from "rebass/styled-components";
+import styled from "@emotion/styled";
+import Modal from "react-modal";
+import { space, color, layout } from "styled-system";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faMusic,
+  faTrash,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const SongListContainer = styled(Box)`
   width: 100%;
@@ -116,6 +119,7 @@ function SongList() {
   const [newSongTitle, setNewSongTitle] = useState('');
   const [newSongArtist, setNewSongArtist] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddingSong, setIsAddingSong] = useState(false); // New state to track adding song status
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -128,14 +132,18 @@ function SongList() {
     dispatch(deleteSong(id));
   };
 
-  const handleAddSong = (e) => {
+  const handleAddSong = async (e) => {
     e.preventDefault();
 
-    if (newSongTitle && newSongArtist) {
-      dispatch(addSong({ title: newSongTitle, artist: newSongArtist }));
+    if (newSongTitle && newSongArtist && !isAddingSong) {
+      setIsAddingSong(true); // Set the flag to indicate adding song is in progress
       setNewSongTitle('');
       setNewSongArtist('');
       closeModal(); // Close the modal after successfully adding a song
+
+      await dispatch(addSong({ title: newSongTitle, artist: newSongArtist }));
+
+      setIsAddingSong(false); // Reset the flag after adding song is completed
     }
   };
 
@@ -154,8 +162,9 @@ function SongList() {
         contentLabel="Add Song Modal"
         style={{
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the overlay color and opacity
-          },}}
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the overlay color and opacity
+          },
+        }}
       >
         <AddSongForm onSubmit={handleAddSong}>
           <input
@@ -193,7 +202,7 @@ function SongList() {
               <button
                 className="m-2 bg-blue-500 flex"
                 onClick={() =>
-                  handleUpdateSong(song.id, 'Updated Song', 'Updated Artist')
+                  handleUpdateSong(song.id, "Updated Song", "Updated Artist")
                 }
               >
                 <FontAwesomeIcon icon={faEdit} className="mr-0.5 text-sm" />
