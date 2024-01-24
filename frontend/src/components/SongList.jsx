@@ -186,7 +186,7 @@ function SongList() {
         </AddSongForm>
       </Modal>
       <ul className="flex flex-col gap-3 p-3">
-        {songs.map((song) => (
+        {songs?.map((song) => (
           <SongItem
             key={song.id}
             className="flex flex-col lg:flex-row items-center lg:justify-between p-3"
