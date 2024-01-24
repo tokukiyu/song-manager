@@ -1,5 +1,8 @@
 // src/songsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Example API URL
 
 const initialState = {
   songs: [],
@@ -21,7 +24,7 @@ const songsSlice = createSlice({
       state.error = action.payload;
     },
     addSong: (state, action) => {
-      state.songs.push(action.payload);
+      state.songs = [action.payload, ...state.songs];
     },
     updateSong: (state, action) => {
       const { id, title, artist } = action.payload;
@@ -39,4 +42,19 @@ const songsSlice = createSlice({
 });
 
 export const { setSongs, setLoading, setError, addSong, updateSong, deleteSong } = songsSlice.actions;
+
+export const fetchSongs = () => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+
+    const response = await axios.get(apiUrl);
+    dispatch(setSongs(response.data));
+
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setError(error.message));
+    dispatch(setLoading(false));
+  }
+};
+
 export default songsSlice.reducer;

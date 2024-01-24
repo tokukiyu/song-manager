@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateSong, deleteSong } from "../songsSlice";
-import { Box, Flex } from "rebass/styled-components";
-import styled from "@emotion/styled";
-import { space, color, layout } from "styled-system";
+// src/components/SongList.js
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateSong, deleteSong, addSong, fetchSongs } from '../songsSlice';
+import { Box, Flex } from 'rebass/styled-components';
+import styled from '@emotion/styled';
+import { space, color, layout } from 'styled-system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faMusic, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faMusic, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const SongListContainer = styled(Box)`
   width: 100%;
@@ -40,8 +41,7 @@ const SongItem = styled(Flex)`
 
     &:hover {
       background-color: #2c3e50;
-      
-    color: #fff;
+      color: #fff;
     }
 
     ${space}
@@ -52,6 +52,32 @@ const SongItem = styled(Flex)`
   ${space}
   ${color}
   ${layout}
+`;
+
+const AddSongForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #2ecc71;
+    color: #fff;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #27ae60;
+    }
+  }
 `;
 
 const Loader = styled(Box)`
@@ -79,8 +105,12 @@ function SongList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({ type: "songs/fetchSongs" });
+    // Fetch songs when the component mounts
+    dispatch(fetchSongs());
   }, [dispatch]);
+
+  const [newSongTitle, setNewSongTitle] = useState('');
+  const [newSongArtist, setNewSongArtist] = useState('');
 
   const handleUpdateSong = (id, title, artist) => {
     dispatch(updateSong({ id, title, artist }));
@@ -90,40 +120,67 @@ function SongList() {
     dispatch(deleteSong(id));
   };
 
+  const handleAddSong = (e) => {
+    e.preventDefault();
+
+    if (newSongTitle && newSongArtist) {
+      dispatch(addSong({ title: newSongTitle, artist: newSongArtist }));
+      setNewSongTitle('');
+      setNewSongArtist('');
+    }
+  };
+
+
   return (
     <SongListContainer>
       {loading && <Loader>Loading...</Loader>}
       {error && <Error>Error: {error}</Error>}
-      <ul className="flex  flex-col gap-3 p-3">
+      <AddSongForm onSubmit={handleAddSong}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={newSongTitle}
+          onChange={(e) => setNewSongTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Artist"
+          value={newSongArtist}
+          onChange={(e) => setNewSongArtist(e.target.value)}
+        />
+        <button type="submit">
+          <FontAwesomeIcon icon={faPlus} className="mr-1" />
+          Add Song
+        </button>
+      </AddSongForm>
+      <ul className="flex flex-col gap-3 p-3">
         {songs.map((song) => (
           <SongItem
             key={song.id}
             className="flex flex-col lg:flex-row items-center lg:justify-between p-3"
           >
-            
             <div className="mb-2 lg:mb-0 lg:mr-4 flex items-center">
               <FontAwesomeIcon icon={faMusic} className="mr-2 text-blue-500" />
               <div>
                 <strong>{song.title}</strong>
-                <span className="text-gray-500 block"> by{song.artist}</span>
+                <span className="text-gray-500 block"> by {song.artist}</span>
               </div>
             </div>
             <div className="flex flex-nowrap">
               <button
                 className="m-2 bg-blue-500 flex"
                 onClick={() =>
-                  handleUpdateSong(song.id, "Updated Song", "Updated Artist")
+                  handleUpdateSong(song.id, 'Updated Song', 'Updated Artist')
                 }
               >
-                 <FontAwesomeIcon icon={faEdit} className="mr-0.5 text-sm" />
-                
+                <FontAwesomeIcon icon={faEdit} className="mr-0.5 text-sm" />
                 Update
               </button>
               <button
                 className="m-2 bg-gray-200 flex items-center text-black"
                 onClick={() => handleDeleteSong(song.id)}
               >
-                 <FontAwesomeIcon icon={faTrash} className="mr-0.5 text-sm" />
+                <FontAwesomeIcon icon={faTrash} className="mr-0.5 text-sm" />
                 Delete
               </button>
             </div>
