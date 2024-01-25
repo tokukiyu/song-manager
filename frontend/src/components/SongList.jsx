@@ -155,7 +155,7 @@ function SongList() {
         <FontAwesomeIcon icon={faPlus} className="mr-1" />
         Add Song
       </button>
-      <Modal
+      <Modal 
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         className="absolute top-1/2 left-1/2 transform bg-white -translate-x-1/2 -translate-y-1/2 border-none rounded shadow-md max-h-70vh w-70vw max-w-400px p-8"
