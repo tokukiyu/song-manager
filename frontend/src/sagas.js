@@ -31,7 +31,6 @@ function* handleFetchSongs() {
 
 function* handleAddSong(action) {
   try {
-    console.log('Handling addSong action:', action);
     const { title, artist } = action.payload;
     const response = yield call(axios.post, apiUrl, { title, artist });
     console.log('Response from server:', response.data);

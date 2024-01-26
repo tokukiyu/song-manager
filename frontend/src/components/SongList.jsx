@@ -7,12 +7,7 @@ import styled from "@emotion/styled";
 import Modal from "react-modal";
 import { space, color, layout } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faMusic,
-  faTrash,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faMusic, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const SongListContainer = styled(Box)`
   width: 100%;
@@ -119,13 +114,30 @@ function SongList() {
   const [newSongTitle, setNewSongTitle] = useState('');
   const [newSongArtist, setNewSongArtist] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddingSong, setIsAddingSong] = useState(false); // New state to track adding song status
+  const [isAddingSong, setIsAddingSong] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const openUpdateModal = (song) => {
+    setSelectedSong(song);
+    setNewSongTitle(song.title); // Set the newSongTitle based on the selected song
+    setNewSongArtist(song.artist); // Set the newSongArtist based on the selected song
+    setIsUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedSong(null); // Reset the selected song when closing the modal
+    setNewSongTitle(''); // Reset newSongTitle when closing the modal
+    setNewSongArtist(''); // Reset newSongArtist when closing the modal
+  };
+
   const handleUpdateSong = (id, title, artist) => {
     dispatch(updateSong({ id, title, artist }));
+    closeUpdateModal(); // Close the update modal after successfully updating a song
   };
 
   const handleDeleteSong = (id) => {
@@ -155,7 +167,7 @@ function SongList() {
         <FontAwesomeIcon icon={faPlus} className="mr-1" />
         Add Song
       </button>
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         className="absolute top-1/2 left-1/2 transform bg-white -translate-x-1/2 -translate-y-1/2 border-none rounded shadow-md max-h-70vh w-70vw max-w-400px p-8"
@@ -179,11 +191,44 @@ function SongList() {
             value={newSongArtist}
             onChange={(e) => setNewSongArtist(e.target.value)}
           />
-          <button className=" bg-blue-500" type="submit">
+          <button className="bg-blue-500" type="submit">
             <FontAwesomeIcon icon={faPlus} className="mr-1" />
             Add Song
           </button>
         </AddSongForm>
+      </Modal>
+      {/* Update Modal */}
+      <Modal
+        isOpen={isUpdateModalOpen}
+        onRequestClose={closeUpdateModal}
+        className="absolute top-1/2 left-1/2 transform bg-white -translate-x-1/2 -translate-y-1/2 border-none rounded shadow-md max-h-70vh w-70vw max-w-400px p-8"
+        contentLabel="Update Song Modal"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the overlay color and opacity
+          },
+        }}
+      >
+        {selectedSong && (
+          <AddSongForm onSubmit={(e) => handleUpdateSong(selectedSong.id, newSongTitle, newSongArtist)}>
+            <input
+              type="text"
+              placeholder="Title"
+              value={newSongTitle}
+              onChange={(e) => setNewSongTitle(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Artist"
+              value={newSongArtist}
+              onChange={(e) => setNewSongArtist(e.target.value)}
+            />
+            <button className="bg-blue-500" type="submit">
+              <FontAwesomeIcon icon={faEdit} className="mr-1" />
+              Update Song
+            </button>
+          </AddSongForm>
+        )}
       </Modal>
       <ul className="flex flex-col gap-3 p-3">
         {songs?.map((song) => (
@@ -192,7 +237,7 @@ function SongList() {
             className="flex flex-col lg:flex-row lg:justify-between p-3"
           >
             <div className="mb-2 lg:mb-0 lg:mr-4 flex items-center">
-              <FontAwesomeIcon icon={faMusic} className="mr-2 p-3  bg-gray-200 rounded-md text-3xl text-blue-500" />
+              <FontAwesomeIcon icon={faMusic} className="mr-2 p-3 bg-gray-200 rounded-md text-3xl text-blue-500" />
               <div>
                 <strong>{song.title}</strong>
                 <span className="text-gray-500 block"> by {song.artist}</span>
@@ -202,11 +247,9 @@ function SongList() {
             <div className="flex flex-nowrap">
               <button
                 className="m-3 bg-blue-500 flex"
-                onClick={() =>
-                  handleUpdateSong(song.id, "Updated Song", "Updated Artist")
-                }
+                onClick={() => openUpdateModal(song)}
               >
-                <FontAwesomeIcon icon={faEdit} className="mr-0.5  text-sm" />
+                <FontAwesomeIcon icon={faEdit} className="mr-0.5 text-sm" />
                 Update
               </button>
               <button
