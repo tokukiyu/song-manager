@@ -1,4 +1,3 @@
-// src/components/SongList.js
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateSong, deleteSong, addSong, fetchSongs } from "../songsSlice";
@@ -140,21 +139,21 @@ function SongList() {
 
   const openUpdateModal = (song) => {
     setSelectedSong(song);
-    setNewSongTitle(song.title); // Set the newSongTitle based on the selected song
-    setNewSongArtist(song.artist); // Set the newSongArtist based on the selected song
+    setNewSongTitle(song.title); 
+    setNewSongArtist(song.artist);
     setIsUpdateModalOpen(true);
   };
 
   const closeUpdateModal = () => {
     setIsUpdateModalOpen(false);
-    setSelectedSong(null); // Reset the selected song when closing the modal
-    setNewSongTitle(""); // Reset newSongTitle when closing the modal
-    setNewSongArtist(""); // Reset newSongArtist when closing the modal
+    setSelectedSong(null); 
+    setNewSongTitle(""); 
+    setNewSongArtist(""); 
   };
 
   const handleUpdateSong = (id, title, artist) => {
     dispatch(updateSong({ id, title, artist }));
-    closeUpdateModal(); // Close the update modal after successfully updating a song
+    closeUpdateModal(); 
   };
 
   const handleDeleteSong = (id) => {
@@ -165,14 +164,14 @@ function SongList() {
     e.preventDefault();
 
     if (newSongTitle && newSongArtist && !isAddingSong) {
-      setIsAddingSong(true); // Set the flag to indicate adding song is in progress
+      setIsAddingSong(true); 
       setNewSongTitle("");
       setNewSongArtist("");
-      closeModal(); // Close the modal after successfully adding a song
+      closeModal(); 
 
       await dispatch(addSong({ title: newSongTitle, artist: newSongArtist }));
 
-      setIsAddingSong(false); // Reset the flag after adding song is completed
+      setIsAddingSong(false);
     }
   };
 
@@ -180,17 +179,15 @@ function SongList() {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   useEffect(() => {
     const handleResize = () => {
-      // Update the visibility of the sidebar based on the screen width
+     
       setMoreInfoBar(window.innerWidth <= 768); // Adjust the breakpoint as needed
     };
 
-    // Attach the event listener
     window.addEventListener("resize", handleResize);
 
-    // Initialize visibility based on initial screen width
+  
     handleResize();
 
-    // Detach the event listener when the component is unmounted
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -333,7 +330,7 @@ function SongList() {
           ))}
         </ul>
       </div>
-      {/* this part need to be not displayed on mobile  */}
+
       {!moreInfBar && (
         <div className="w-1/5">
           <MoreInfo />

@@ -1,8 +1,7 @@
-// src/songsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Example API URL
+const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; 
 
 const initialState = {
   songs: [],
